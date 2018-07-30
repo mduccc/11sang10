@@ -56,7 +56,6 @@ class ConvertFragment : Fragment() {
             it.textSize = sX*1f
             it.setTextColor(resources.getColor(R.color.colorDarkBlue))
             it.measure(0,0)
-            it.x = sX*50 - it.measuredWidth/2
             it.y = sY*89
             convert_fragment.addView(it)
             it.gravity = Gravity.CENTER
