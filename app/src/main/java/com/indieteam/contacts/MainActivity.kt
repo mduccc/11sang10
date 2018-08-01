@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.widget.RelativeLayout
 import android.widget.Toast
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main.*
@@ -26,11 +27,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init(){
-        permission()
         getScreen()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            permission()
+        else
+            setUI()
     }
 
     private fun setUI(){
+        toolbar_.layoutParams.height = (sY*10).toInt()
+        tab_layout.layoutParams.height = (sY*7).toInt()
+        tab_layout.y = (sY*10).toInt().toFloat()
+
         setSupportActionBar(toolbar_)
         title = "Chuyển đổi danh bạ"
         val layout = arrayListOf(ConvertFragment(), ConvertAgainFragment())
@@ -46,11 +54,11 @@ class MainActivity : AppCompatActivity() {
                 1 ->{
                     tab_layout.getTabAt(i)?.text = "10 sang 11"
                 }
-                else ->{
-
-                }
+                else ->{ }
             }
         }
+
+
     }
 
     private fun getScreen(){

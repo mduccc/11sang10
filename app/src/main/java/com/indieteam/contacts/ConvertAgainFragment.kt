@@ -40,19 +40,19 @@ class ConvertAgainFragment : Fragment() {
         header = TextView(activity)
         header.let{
             it.text = "Chuyển danh bạ 10 số sang 11 số "
-            it.textSize = sX*2f
+            it.textSize = 20f
             it.typeface = Typeface.DEFAULT_BOLD
             it.setTextColor(resources.getColor(R.color.colorDarkBlue))
             it.measure(0,0)
             it.x = sX*50 - it.measuredWidth/2
-            it.y = sY*20
+            it.y = sY*22
             convert_fragment.addView(it)
         }
 
         result = TextView(activity)
         result.let{
             it.text = "* Tự động chuyển tương thích với các nhà mạng (Viettel, Vinaphone, Mobifone, Vietnamobie, Gmobie)"
-            it.textSize = sX*1f
+            it.textSize = 10f
             it.setTextColor(resources.getColor(R.color.colorDarkBlue))
             it.measure(0,0)
             it.y = sY*89
@@ -64,12 +64,12 @@ class ConvertAgainFragment : Fragment() {
         button = Button(activity)
         button.let {
             it.text = "Chuyển"
-            it.textSize = sX*1f
             it.background = resources.getDrawable(R.color.colorDarkBlue)
             it.setTextColor(resources.getColor(R.color.colorWhite))
             it.measure(0,0)
+            it.textSize = 10f
             it.x = sX*50 - it.measuredWidth/2
-            it.y = sY*53 - it.measuredHeight/2
+            it.y = sY*54 - it.measuredHeight/2
             convert_fragment.addView(it)
         }
     }
