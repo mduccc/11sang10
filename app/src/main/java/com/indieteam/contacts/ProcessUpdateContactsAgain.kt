@@ -1,9 +1,8 @@
-package contacts.indieteam.contacts
+package com.indieteam.contacts
 
 import android.app.Activity
 import android.content.ContentProviderOperation
 import android.database.Cursor
-import android.os.Build
 import android.provider.ContactsContract
 import android.util.Log
 

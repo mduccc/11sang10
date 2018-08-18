@@ -1,4 +1,4 @@
-package contacts.indieteam.contacts
+package com.indieteam.contacts
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -8,8 +8,8 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
-import android.widget.RelativeLayout
 import android.widget.Toast
+import contacts.indieteam.contacts.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -71,8 +71,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun permission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf( Manifest.permission.WRITE_CONTACTS), PERMISSIONS_REQUEST_CONTACTS)
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CONTACTS) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf( Manifest.permission.WRITE_CONTACTS, Manifest.permission.READ_CONTACTS), PERMISSIONS_REQUEST_CONTACTS)
             }else{
                 setUI()
             }
@@ -81,7 +81,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         if(requestCode == PERMISSIONS_REQUEST_CONTACTS){
-            if(grantResults.size == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 setUI()
             }
             else

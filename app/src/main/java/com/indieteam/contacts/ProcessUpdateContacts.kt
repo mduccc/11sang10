@@ -1,13 +1,16 @@
-package contacts.indieteam.contacts
+package com.indieteam.contacts
 
-import android.app.Activity
+import android.Manifest
 import android.content.ContentProviderOperation
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Build
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.Toast
+import es.dmoral.toasty.Toasty
 
-class ProcessUpdateContacts(val context: Activity){
+class ProcessUpdateContacts(val context: MainActivity){
     private lateinit var cursor: Cursor
     val contactsDetails = arrayListOf<ContactsDetails>()
     val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI

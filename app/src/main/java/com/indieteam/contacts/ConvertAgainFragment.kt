@@ -1,9 +1,9 @@
-package contacts.indieteam.contacts
+package com.indieteam.contacts
 
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import contacts.indieteam.contacts.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.fragment_convert_fragment.*
 
@@ -64,7 +65,11 @@ class ConvertAgainFragment : Fragment() {
         button = Button(activity)
         button.let {
             it.text = "Chuyển"
-            it.background = resources.getDrawable(R.color.colorDarkBlue)
+            if(Build.VERSION.SDK_INT < 16){
+                it.setBackgroundDrawable(resources.getDrawable(R.color.colorDarkBlue))
+            }else {
+                it.background = resources.getDrawable(R.color.colorDarkBlue)
+            }
             it.setTextColor(resources.getColor(R.color.colorWhite))
             it.measure(0,0)
             it.textSize = 10f

@@ -1,4 +1,4 @@
-package contacts.indieteam.contacts
+package com.indieteam.contacts
 
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

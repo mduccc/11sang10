@@ -1,4 +1,4 @@
-package contacts.indieteam.contacts
+package com.indieteam.contacts
 
 import android.app.Activity
 import com.afollestad.materialdialogs.MaterialDialog
@@ -9,7 +9,7 @@ class DialogProcess(private val context: Activity){
 
     fun showDialog(){
         dialog = MaterialDialog.Builder(context)
-                .content("Đang chuyển... (có thể mất tới vài phút)\n")
+                .content("Đang chuyển...)\n")
                 .progress(true, 0)
                 .progressIndeterminateStyle(true)
                 .show()
