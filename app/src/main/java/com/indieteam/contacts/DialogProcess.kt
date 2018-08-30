@@ -9,7 +9,7 @@ class DialogProcess(private val context: Activity){
 
     fun showDialog(){
         dialog = MaterialDialog.Builder(context)
-                .content("Đang chuyển...)\n")
+                .content("Đang chuyển...")
                 .progress(true, 0)
                 .progressIndeterminateStyle(true)
                 .show()

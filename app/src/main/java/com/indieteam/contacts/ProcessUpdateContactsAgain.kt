@@ -5,32 +5,38 @@ import android.content.ContentProviderOperation
 import android.database.Cursor
 import android.provider.ContactsContract
 import android.util.Log
+import es.dmoral.toasty.Toasty
 
-class ProcessUpdateContactsAgain(val context: Activity){
+class ProcessUpdateContactsAgain(private val context: Activity){
     private lateinit var cursor: Cursor
-    val contactsDetails = arrayListOf<ContactsDetails>()
-    val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+    private val contactsDetails = arrayListOf<ContactsDetails>()
+    private val uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
 
     fun readContacts(){
         var id: Int
         var name: String
         var phone: String
-        cursor = context.contentResolver.query(uri, null, null, null, null)
-        while (cursor.moveToNext()) {
-            id = cursor.getInt(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID))
-            name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
-            phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-            contactsDetails.add(ContactsDetails(id, name, phone))
+        try {
+            cursor = context.contentResolver.query(uri, null, null, null, null)
+            while (cursor.moveToNext()) {
+                id = cursor.getInt(cursor.getColumnIndex(ContactsContract.Data.RAW_CONTACT_ID))
+                name = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+                phone = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                contactsDetails.add(ContactsDetails(id, name, phone))
+            }
+            cursor.close()
+        }catch (e: Exception){
+            Toasty.error(context, "Your device is not support")
+
         }
-        cursor.close()
     }
 
     private fun trimNumber(rawNumber: String): String{
+        // remove all if it's not number
         var numberOnly = rawNumber.replace("[^0-9]".toRegex(), "")
-        if(numberOnly.get(0).toString() == "8" && numberOnly.get(1).toString() == "4"){
-            Log.d("84: ", "84")
+        if(numberOnly[0].toString() == "8" && numberOnly[1].toString() == "4"){
             numberOnly = "+$numberOnly"
-            if(numberOnly.get(3).toString() == "0"){
+            if(numberOnly[3].toString() == "0"){
                 numberOnly = "+84${numberOnly.substring(4)}"
             }
         }
@@ -38,14 +44,14 @@ class ProcessUpdateContactsAgain(val context: Activity){
     }
 
     private fun convert(number: String): String{
-        var convered = number
+        var converted = number
         var needConvert = 1
-        var firstOld = ""
+        val firstOld: String
         var firstNew = ""
-        if(number.get(1).toString() == "8" && number.get(2).toString() == "4")
-            firstOld = "0${number.get(3)}${number.get(4)}"
+        if(number[0].toString() == "+" && number[1].toString() == "8" && number[2].toString() == "4")
+            firstOld = "0${number[3]}${number[4]}"
         else
-            firstOld = "${number.get(0)}${number.get(1)}${number.get(2)}"
+            firstOld = "${number[0]}${number[1]}${number[2]}"
 
         when(firstOld){
         //Viettel
@@ -82,32 +88,33 @@ class ProcessUpdateContactsAgain(val context: Activity){
         }
 
         if(needConvert == 1){
-            if(number.get(1).toString() == "8" && number.get(2).toString() == "4")
-                convered = "+84${firstNew.substring(1)}${number.substring(5)}"
+            if(number[0].toString() == "+" && number[1].toString() == "8" && number[2].toString() == "4")
+                converted = "+84${firstNew.substring(1)}${number.substring(5)}"
             else
-                convered = "$firstNew${number.substring(3)}"
+                converted = "$firstNew${number.substring(3)}"
         }
-        return convered
+        return converted
     }
 
     fun updateContacts(){
-
-        for(i in contactsDetails){
-            val operation = arrayListOf<ContentProviderOperation>()
-            val where = ContactsContract.CommonDataKinds.Phone.NUMBER + "=?"
-            val param = arrayOf(i.phone)
-            val trimNumber = trimNumber(i.phone)
-            val convered = convert(trimNumber)
-            Log.d("name: ", i.name)
-            Log.d("phone trim: ", trimNumber)
-            Log.d("phone converted: ", convered+"\n\n")
-            operation.add(ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
-                    .withSelection(where, param)
-                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, convered)
-                    .build())
-            context.contentResolver.applyBatch(ContactsContract.AUTHORITY, operation)
+        if(contactsDetails.size > 0) {
+            for (i in contactsDetails) {
+                val operation = arrayListOf<ContentProviderOperation>()
+                val where = ContactsContract.CommonDataKinds.Phone.NUMBER + "=?"
+                val param = arrayOf(i.phone)
+                val trimNumber = trimNumber(i.phone)
+                val converted = convert(trimNumber)
+                Log.d("name: ", i.name)
+                Log.d("phone origin: ", i.phone)
+                Log.d("phone trim: ", trimNumber)
+                Log.d("phone converted: ", converted + "\n\n")
+                operation.add(ContentProviderOperation.newUpdate(ContactsContract.Data.CONTENT_URI)
+                        .withSelection(where, param)
+                        .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, converted)
+                        .build())
+                context.contentResolver.applyBatch(ContactsContract.AUTHORITY, operation)
+            }
+            Log.d("Update", "Done")
         }
-        Log.d("Update", "Done")
-        cursor.close()
     }
 }

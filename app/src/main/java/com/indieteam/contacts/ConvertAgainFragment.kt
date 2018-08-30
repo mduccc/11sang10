@@ -59,7 +59,7 @@ class ConvertAgainFragment : Fragment() {
             it.y = sY*89
             convert_fragment.addView(it)
             it.gravity = Gravity.CENTER
-            it.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+            it.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
         }
 
         button = Button(activity)

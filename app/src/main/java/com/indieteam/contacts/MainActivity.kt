@@ -80,11 +80,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if(requestCode == PERMISSIONS_REQUEST_CONTACTS){
-            if(grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == PERMISSIONS_REQUEST_CONTACTS) {
+            if (grantResults.size == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 setUI()
-            }
-            else
+            } else
                 Toasty.error(this, "Permission is not granded", Toast.LENGTH_SHORT).show()
         }
     }
