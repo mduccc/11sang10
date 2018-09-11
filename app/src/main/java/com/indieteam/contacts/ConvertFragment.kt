@@ -3,6 +3,7 @@ package com.indieteam.contacts
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,31 +13,41 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.gms.ads.AdRequest
 import contacts.indieteam.contacts.R
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.fragment_convert_fragment.*
+import kotlinx.android.synthetic.main.fragment_convert.*
 
 class ConvertFragment : Fragment() {
 
     private lateinit var header: TextView
     private lateinit var result: TextView
     private lateinit var button: Button
+    private var sX = 0f
+    private var sY = 0f
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_convert_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_convert, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUI()
+        ads()
         event()
     }
 
+    private fun ads(){
+        val adRequest = AdRequest.Builder().build()
+        bottom_ads_1.loadAd(adRequest)
+        bottom_ads_1.layoutParams.height = (sY*7).toInt()
+    }
+
     private fun setUI(){
-        val sX = (activity as MainActivity).sX
-        val sY = (activity as MainActivity).sY
+        sX = (activity as MainActivity).sX
+        sY = (activity as MainActivity).sY
 
         header = TextView(activity)
         header.let{
@@ -56,7 +67,7 @@ class ConvertFragment : Fragment() {
             it.textSize = 10f
             it.setTextColor(resources.getColor(R.color.colorDarkBlue))
             it.measure(0,0)
-            it.y = sY*89
+            it.y = sY*88
             convert_fragment.addView(it)
             it.gravity = Gravity.CENTER
             it.layoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
@@ -81,13 +92,13 @@ class ConvertFragment : Fragment() {
 
     private fun event(){
         button.setOnClickListener{
-            TheardUpdate().theard.start()
+            ThreadUpdate().thread.start()
         }
     }
 
-    inner class TheardUpdate: Runnable{
+    inner class ThreadUpdate: Runnable{
 
-        val theard = Thread(this)
+        val thread = Thread(this)
 
         override fun run() {
             ProcessUpdateContacts(activity as MainActivity).let {
@@ -101,9 +112,13 @@ class ConvertFragment : Fragment() {
                 activity?.runOnUiThread {
                     Toasty.success(activity!!, "Đã chuyển tất cả danh bạ sang 10 số", Toast.LENGTH_SHORT).show()
                     dialog.dialog.cancel()
+                    Handler().postDelayed({
+                        (activity as MainActivity).adsVideo()
+                    },500)
                 }
             }
         }
 
     }
+
 }

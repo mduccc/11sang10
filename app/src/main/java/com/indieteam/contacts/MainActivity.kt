@@ -9,6 +9,10 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import contacts.indieteam.contacts.R
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val PERMISSIONS_REQUEST_CONTACTS = 1
     var sX = 0f
     var sY = 0f
+    private lateinit var mInterstitialAd: InterstitialAd
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,5 +92,25 @@ class MainActivity : AppCompatActivity() {
                 Toasty.error(this, "Permission is not granded", Toast.LENGTH_SHORT).show()
         }
     }
+
+    fun adsVideo() {
+        MobileAds.initialize(this,
+                "ca-app-pub-1117482668766229~8667013967")
+
+        val idTest = "ca-app-pub-3940256099942544/8691691433"
+        val idReal = "ca-app-pub-1117482668766229/5383209226"
+        mInterstitialAd = InterstitialAd(this)
+
+        //ID test: ca-app-pub-3940256099942544/8691691433
+        //ID real: ca-app-pub-1117482668766229/5383209226
+        mInterstitialAd.apply {
+            adUnitId = idTest
+            loadAd(AdRequest.Builder().build())
+            adListener = object : AdListener() {
+                override fun onAdLoaded() { mInterstitialAd.show() }
+            }
+        }
+    }
+
 
 }

@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ads_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ads_id_real_1">ca-app-pub-1117482668766229/3961482194</string>
+    <string name="ads_id_real_2">ca-app-pub-1117482668766229/2365329499</string>
 </resources>
